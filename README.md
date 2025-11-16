@@ -103,7 +103,10 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. 🌍 Live Demo
+
+🔗 View on Vercel
+ [Visit the live site](https://grace-portfolio-zeta.vercel.app/)
 
 ### Building for Production
 
