@@ -1,7 +1,7 @@
 // components/Footer.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Heart, ArrowUp } from 'lucide-react';
+import { Mail, Phone, ArrowUp } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
