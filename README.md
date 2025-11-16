@@ -144,9 +144,7 @@ The website is fully responsive and optimized for:
 - Phone: +234 9123405631
 - Location: Lagos, Nigeria
 
-## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
