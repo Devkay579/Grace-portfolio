@@ -51,14 +51,16 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 mb-8"
           >
-            <motion.button
+            <motion.a
+            href="/cv/Folaranmi Aletan-1.pdf"
+            download
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="w-full max-w-[200px] bg-blue-600 text-white rounded-lg py-3 px-6 font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all duration-300 shadow-lg"
             >
               <Download size={20} />
               Download CV
-            </motion.button>
+            </motion.a>
           </motion.div>
 
           
