@@ -98,7 +98,7 @@ const Hero: React.FC = () => {
             <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-gray-100 shadow-2xl">
               
               <div className="w-full h-full bg-blue-50 flex items-center justify-center text-gray-600">
-                <img src="../images/grace.jpg" alt="image"  />
+                <img src="/images/grace.jpg" alt="Grace" />
               </div>
             </div>
             
