@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10  rounded-full overflow-hidden">
                 <div className="w-full h-full bg-blue-50 flex items-center justify-center text-gray-600">
-                <img src="../images/grace.jpg" alt="image"  />
+                <img src="/images/grace.jpg" alt="Grace" />
               </div>
               </div>
               <span className="font-bold text-2xl text-gray-900">AF</span>

@@ -19,11 +19,11 @@ A modern, responsive portfolio website built with React, TypeScript, and Tailwin
 
 ## 🛠️ Technologies Used
 
-- **Frontend Framework**: React 18 with TypeScript
+- **Frontend Framework**: React 19 with TypeScript
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Build Tool**: Vite (inferred from modern React setup)
+- **Build Tool**: Vite
 
 ## 📦 Project Structure
 
