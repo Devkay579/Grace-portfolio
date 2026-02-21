@@ -1,9 +1,12 @@
 // components/Contact.tsx
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Mail, Phone, User, MessageSquare, Send, MapPin, Clock, Star } from 'lucide-react';
+import {
+  Mail, Phone, User, MessageSquare, Send, MapPin, Clock, Star,
+  CheckCircle, XCircle
+} from 'lucide-react';
 
 const Contact: React.FC = () => {
   const ref = useRef(null);
@@ -14,21 +17,51 @@ const Contact: React.FC = () => {
     subject: '',
     message: ''
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Toast state
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+
+  const showToast = (type: 'success' | 'error', message: string) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
+
+    try {
+      const response = await fetch('https://formspree.io/f/mbdazlzj', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      if (response.ok) {
+        showToast('success', 'Message sent successfully!');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        showToast('error', 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      showToast('error', 'Network error. Please check your connection.');
+    } finally {
       setIsSubmitting(false);
-      // Reset form
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      alert('Thank you for your message! I will get back to you soon.');
-    }, 2000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,19 +102,40 @@ const Contact: React.FC = () => {
       position: "Senior Social Media Manager",
       company: "Switchfest",
       phone: "+234 9058958353",
-      
     },
     {
       name: "Binuyo Damitare",
       position: "Co-Founder",
       company: "PluggedNg",
       phone: "+234 9091913144",
-      
     }
   ];
 
   return (
-    <section ref={ref} id="contact" className="py-20 px-4 bg-gray-50">
+    <section ref={ref} id="contact" className="py-20 px-4 bg-gray-50 relative">
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-lg shadow-xl flex items-center gap-3 ${
+              toast.type === 'success'
+                ? 'bg-green-600 text-white'
+                : 'bg-red-600 text-white'
+            }`}
+          >
+            {toast.type === 'success' ? (
+              <CheckCircle size={20} />
+            ) : (
+              <XCircle size={20} />
+            )}
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -159,7 +213,6 @@ const Contact: React.FC = () => {
                       <p className="text-blue-600 mb-1">{ref.position}</p>
                       <p className="text-gray-500 text-sm mb-2">{ref.company}</p>
                       <p className="text-gray-700">{ref.phone}</p>
-                      
                     </motion.div>
                   ))}
                 </div>
@@ -194,13 +247,14 @@ const Contact: React.FC = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors"
+                        disabled={isSubmitting}
+                        className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Your full name"
                         required
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700">
                       Email Address *
@@ -213,7 +267,8 @@ const Contact: React.FC = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors"
+                        disabled={isSubmitting}
+                        className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="your.email@example.com"
                         required
                       />
@@ -231,12 +286,13 @@ const Contact: React.FC = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors"
+                    disabled={isSubmitting}
+                    className="w-full px-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="What is this regarding?"
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium mb-2 text-gray-700">
                     Message *
@@ -248,19 +304,20 @@ const Contact: React.FC = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
+                      disabled={isSubmitting}
                       rows={6}
-                      className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 resize-none transition-colors"
+                      className="w-full pl-10 pr-4 py-4 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 resize-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Tell me about your project, goals, and how I can help..."
                       required
                     />
                   </div>
                 </div>
-                
+
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                   className="w-full bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
                 >
                   {isSubmitting ? (
