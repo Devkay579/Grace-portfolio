@@ -16,7 +16,10 @@ const platforms = ['Instagram', 'TikTok', 'X', 'YouTube'];
 
 const Hero: React.FC = () => {
   return (
-    <section id="home" className="relative overflow-hidden px-4 pb-20 pt-28 sm:px-6 md:pb-28 md:pt-36">
+    <section
+      id="home"
+      className="relative flex min-h-svh items-center overflow-hidden px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28"
+    >
       {/* Background glow + grid */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-brand/15 blur-3xl" />
@@ -31,7 +34,7 @@ const Hero: React.FC = () => {
         />
       </div>
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
         {/* Copy */}
         <div className="text-center md:text-left">
           <motion.div
