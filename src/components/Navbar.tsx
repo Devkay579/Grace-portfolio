@@ -1,145 +1,178 @@
 // components/Navbar.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Mail, Phone } from 'lucide-react';
+import { Menu, X, Mail, Phone, Download, Sun, Moon } from 'lucide-react';
 import { useScroll } from '../hooks/useScroll';
+import { useTheme } from '../hooks/useTheme';
+import { useActiveSection } from '../hooks/useActiveSection';
+import { navItems, profile } from '../data/profile';
+
+const sectionIds = navItems.map((item) => item.id);
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const isScrolled = useScroll(50);
+  const isScrolled = useScroll(16);
+  const active = useActiveSection(sectionIds);
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
-  const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Education', href: '#education' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const themeButton = (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-line bg-surface text-ink transition-colors hover:bg-surface-2"
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={theme}
+          initial={{ y: -14, opacity: 0, rotate: -45 }}
+          animate={{ y: 0, opacity: 1, rotate: 0 }}
+          exit={{ y: 14, opacity: 0, rotate: 45 }}
+          transition={{ duration: 0.2 }}
+          className="flex"
+        >
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+        </motion.span>
+      </AnimatePresence>
+    </button>
+  );
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsOpen(false);
-  };
+  // Close the mobile menu with Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
+
+  const solid = isScrolled || isOpen;
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-2"
-            >
-              <div className="w-8 h-8 rounded-full overflow-hidden">
-                <div className="w-full h-full bg-blue-50 flex items-center justify-center text-gray-600">
-                <img src="../images/grace.jpg" alt="image"  />
-              </div>
-              </div>
-              <span className="font-bold text-xl text-gray-900">
-                AF
-              </span>
-            </motion.div>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        solid
+          ? 'border-b border-line bg-page/85 backdrop-blur-xl'
+          : 'border-b border-transparent bg-transparent'
+      }`}
+    >
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 md:h-[72px]">
+        {/* Logo */}
+        <a href="#home" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
+          <img
+            src={profile.photo}
+            alt=""
+            className="h-9 w-9 rounded-full object-cover object-[40%_25%] ring-2 ring-brand/30"
+          />
+          <span className="font-display text-base font-bold tracking-tight text-ink sm:text-lg">
+            {profile.name}
+          </span>
+        </a>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  whileHover={{ y: -2 }}
-                  className="font-medium text-gray-700 hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </motion.button>
-              ))}
-              
-              {/* Contact Info */}
-              <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-gray-300">
-                <motion.a
-                  href="mailto:folaranmialetan@gmail.com"
-                  whileHover={{ scale: 1.05 }}
-                  className="p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors"
-                >
-                  <Mail size={16} />
-                </motion.a>
-                <motion.a
-                  href="tel:+2349123405631"
-                  whileHover={{ scale: 1.05 }}
-                  className="p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors"
-                >
-                  <Phone size={16} />
-                </motion.a>
-              </div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+        {/* Desktop links */}
+        <div className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                active === item.id
+                  ? 'bg-brand-soft text-brand-ink'
+                  : 'text-muted hover:text-ink'
+              }`}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
-          </div>
+              {item.name}
+            </a>
+          ))}
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-t border-gray-200"
-            >
-              <div className="px-4 py-6 space-y-4">
-                {navItems.map((item, index) => (
-                  <motion.button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.href)}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="block w-full text-left py-3 text-gray-700 hover:text-blue-600 font-medium border-b border-gray-100 transition-colors"
-                  >
-                    {item.name}
-                  </motion.button>
+        <div className="hidden items-center gap-3 lg:flex">
+          {themeButton}
+          <a
+            href={profile.cv.href}
+            download={profile.cv.filename}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+          >
+            <Download size={16} />
+            Download CV
+          </a>
+        </div>
+
+        {/* Mobile: theme + menu toggle */}
+        <div className="flex items-center gap-2 lg:hidden">
+          {themeButton}
+          <button
+            type="button"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors hover:bg-surface-2"
+          >
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden border-t border-line bg-page lg:hidden"
+          >
+            <div className="mx-auto max-w-6xl px-4 pb-6 pt-3 sm:px-6">
+              <ul className="grid gap-1">
+                {navItems.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      onClick={() => setIsOpen(false)}
+                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                        active === item.id
+                          ? 'bg-brand-soft text-brand-ink'
+                          : 'text-ink hover:bg-surface-2'
+                      }`}
+                    >
+                      {item.name}
+                    </a>
+                  </li>
                 ))}
-                
-                {/* Mobile Contact Info */}
-                <div className="flex space-x-4 pt-4">
-                  <motion.a
-                    href="mailto:folaranmialetand@gmail.com"
-                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-                  >
-                    <Mail size={16} />
-                    <span>Email</span>
-                  </motion.a>
-                  <motion.a
-                    href="tel:+2349028406631"
-                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-                  >
-                    <Phone size={16} />
-                    <span>Call</span>
-                  </motion.a>
-                </div>
+              </ul>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 py-3 text-sm font-semibold text-ink"
+                >
+                  <Mail size={16} /> Email
+                </a>
+                <a
+                  href={`tel:${profile.phones[0].tel}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 py-3 text-sm font-semibold text-ink"
+                >
+                  <Phone size={16} /> Call
+                </a>
+                <a
+                  href={profile.cv.href}
+                  download={profile.cv.filename}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-white"
+                >
+                  <Download size={16} /> Download CV
+                </a>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-    </>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
 

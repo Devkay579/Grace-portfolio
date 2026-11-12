@@ -1,129 +1,82 @@
 // components/Footer.tsx
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Mail, Phone, ArrowUp } from 'lucide-react';
+import { navItems, profile } from '../data/profile';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {/* Brand Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="md:col-span-1"
-          >
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10  rounded-full overflow-hidden">
-                <div className="w-full h-full bg-blue-50 flex items-center justify-center text-gray-600">
-                <img src="../images/grace.jpg" alt="image"  />
-              </div>
-              </div>
-              <span className="font-bold text-2xl text-gray-900">AF</span>
-            </div>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Transforming brands through compelling storytelling and data-driven social media 
-              strategies. Let's create something amazing together.
+    <footer className="border-t border-line bg-page-alt px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl py-14">
+        <div className="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr]">
+          {/* Brand */}
+          <div>
+            <a href="#home" className="flex items-center gap-3">
+              <img
+                src={profile.photo}
+                alt=""
+                className="h-10 w-10 rounded-full object-cover object-[40%_25%] ring-2 ring-brand/30"
+              />
+              <span className="font-display text-lg font-bold text-ink">{profile.name}</span>
+            </a>
+            <p className="mt-4 max-w-sm leading-relaxed text-muted">
+              Social media manager helping brands grow through storytelling, content strategy and
+              data-backed campaigns.
             </p>
-            <div className="flex space-x-4">
-              <motion.a
-                href="mailto:folaranmialetan@gmail.com"
-                whileHover={{ scale: 1.1 }}
-                className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors"
-              >
-                <Mail size={20} />
-              </motion.a>
-              <motion.a
-                href="tel:+2349123405631"
-                whileHover={{ scale: 1.1 }}
-                className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors"
-              >
-                <Phone size={20} />
-              </motion.a>
-            </div>
-          </motion.div>
+          </div>
 
-          {/* Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-1"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Links</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {['Home', 'About', 'Experience', 'Education', 'Skills', 'Contact'].map((item) => (
-                <motion.button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  whileHover={{ x: 5 }}
-                  className="text-left text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  {item}
-                </motion.button>
+          {/* Links */}
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-subtle">Explore</h3>
+            <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <a href={`#${item.id}`} className="text-muted transition-colors hover:text-brand-ink">
+                    {item.name}
+                  </a>
+                </li>
               ))}
-            </div>
-          </motion.div>
+            </ul>
+          </div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="md:col-span-1"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Get In Touch</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-gray-600">
-                <Mail size={18} />
-                <a href="mailto:folaranmialetan@gmail.com" className="hover:text-blue-600 transition-colors">
-                  folaranmialetan@gmail.com
+          {/* Contact */}
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-subtle">Get in touch</h3>
+            <ul className="mt-4 space-y-3">
+              <li>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="inline-flex items-center gap-3 break-all text-muted transition-colors hover:text-brand-ink"
+                >
+                  <Mail size={16} className="shrink-0" />
+                  {profile.email}
                 </a>
-              </div>
-              <div className="flex items-center space-x-3 text-gray-600">
-                <Phone size={18} />
-                <a href="tel:+2349123405631" className="hover:text-blue-600 transition-colors">
-                  +234 9123405631
-                </a>
-              </div>
-            </div>
-          </motion.div>
+              </li>
+              {profile.phones.map((phone) => (
+                <li key={phone.tel}>
+                  <a
+                    href={`tel:${phone.tel}`}
+                    className="inline-flex items-center gap-3 text-muted transition-colors hover:text-brand-ink"
+                  >
+                    <Phone size={16} className="shrink-0" />
+                    {phone.display}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center space-x-1 text-gray-600 mb-4 md:mb-0"
+        <div className="mt-12 flex items-center justify-between gap-4 border-t border-line pt-8">
+          <p className="text-sm text-subtle">&copy; {currentYear} {profile.name}. All rights reserved.</p>
+          <a
+            href="#home"
+            aria-label="Back to top"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand text-white shadow-lift transition hover:-translate-y-0.5 hover:bg-brand-hover"
           >
-            <span>&copy; {currentYear} Aletan Folaranmi</span>
-          </motion.div>
-
-          <motion.button
-            onClick={scrollToTop}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
-          >
-            <ArrowUp size={20} />
-          </motion.button>
+            <ArrowUp size={18} />
+          </a>
         </div>
       </div>
     </footer>

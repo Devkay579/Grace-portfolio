@@ -2,9 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpg" href="/images/grace.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aletan Folaranmi</title>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" />
+    <script>
+      // Apply the saved (or system) theme before first paint to avoid a flash
+      (function () {
+        var t;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', t === 'dark' ? '#070b14' : '#ffffff');
+      })();
+    </script>
+    <meta
+      name="description"
+      content="Folaranmi Aletan – Social Media Manager in Lagos, Nigeria. Content strategy, digital storytelling, community management and data-backed campaigns."
+    />
+    <link rel="icon" type="image/jpeg" href="/images/grace.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Folaranmi Aletan · Social Media Manager</title>
   </head>
   <body>
     <div id="root"></div>

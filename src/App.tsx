@@ -1,4 +1,5 @@
 // App.tsx
+import { MotionConfig } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -11,17 +12,21 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
-      <Navbar />
-      <Hero />
-      <About />
-      <Experience />
-      <Education />
-      <Skills />
-      <Certifications />
-      <Contact />
-      <Footer />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen overflow-x-clip bg-page text-ink">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Experience />
+          <Education />
+          <Skills />
+          <Certifications />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }
 

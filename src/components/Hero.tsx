@@ -1,169 +1,152 @@
 // components/Hero.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Download, ArrowDown } from 'lucide-react';
+import { Mail, Phone, Download, ArrowRight, MapPin } from 'lucide-react';
+import { profile } from '../data/profile';
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease },
+});
+
+const platforms = ['Instagram', 'TikTok', 'X', 'YouTube'];
 
 const Hero: React.FC = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section id="home" className="relative min-h-screen bg-white overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 py-12 flex flex-col md:flex-row items-center justify-center min-h-screen pt-20 md:pt-32">
-        
-        <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 text-gray-900"
-          >
-            ALETAN <span className="text-blue-600">FOLARANMI</span>
-          </motion.h1>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl lg:text-3xl font-light mb-6 text-gray-700"
-          >
-            SOCIAL MEDIA MANAGER
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl"
-          >
-            Transforming brands through compelling storytelling, data-driven strategies, 
-            and authentic engagement in the beauty and lifestyle space.
-          </motion.p>
-
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 mb-8"
-          >
-            <motion.a
-            href="/cv/Folaranmi Aletan-1.pdf"
-            download
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full max-w-[200px] bg-blue-600 text-white rounded-lg py-3 px-6 font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all duration-300 shadow-lg"
-            >
-              <Download size={20} />
-              Download CV
-            </motion.a>
-          </motion.div>
-
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row justify-start items-center gap-6 text-gray-600"
-          >
-            <div className="flex items-center gap-2">
-              <Phone size={18} />
-              <span>+234 9123405631</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail size={18} />
-              <a 
-                href="mailto:folaranmialetan@gmail.com"
-                className="hover:text-blue-600 transition-colors"
-              >
-                folaranmialetan@gmail.com
-              </a>
-            </div>
-          </motion.div>
-        </div>
-
-        
-        <div className="md:w-1/2 flex justify-center md:justify-end relative">
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="relative"
-          >
-            
-            <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-gray-100 shadow-2xl">
-              
-              <div className="w-full h-full bg-blue-50 flex items-center justify-center text-gray-600">
-                <img src="../images/grace.jpg" alt="image"  />
-              </div>
-            </div>
-            
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="absolute -bottom-4 -right-4 bg-blue-600 text-white px-6 py-3 rounded-full shadow-2xl font-bold transform rotate-6 hover:rotate-0 transition-transform duration-300 border-2 border-white"
-            >
-              3+ Years Experience
-            </motion.div>
-
-            
-            <motion.div
-              animate={{ 
-                y: [0, -20, 0],
-                rotate: [0, 5, 0]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="absolute -top-4 -left-4 bg-blue-500 text-white p-3 rounded-full shadow-lg border-2 border-white"
-            >
-              <Mail size={20} />
-            </motion.div>
-
-            <motion.div
-              animate={{ 
-                y: [0, 15, 0],
-                rotate: [0, -5, 0]
-              }}
-              transition={{ 
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
-              }}
-              className="absolute top-1/2 -right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg border-2 border-white"
-            >
-              <Phone size={20} />
-            </motion.div>
-          </motion.div>
-        </div>
+    <section id="home" className="relative overflow-hidden px-4 pb-20 pt-28 sm:px-6 md:pb-28 md:pt-36">
+      {/* Background glow + grid */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-brand/15 blur-3xl" />
+        <div className="absolute -left-40 top-1/2 h-[22rem] w-[22rem] rounded-full bg-sky-400/10 blur-3xl" />
+        <div
+          className="absolute inset-0 opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)]"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, var(--line) 1px, transparent 1px), linear-gradient(to bottom, var(--line) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+          }}
+        />
       </div>
 
-      
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
+      <div className="relative mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[1.15fr_0.85fr] md:gap-12">
+        {/* Copy */}
+        <div className="text-center md:text-left">
+          <motion.div
+            {...fadeUp(0)}
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/80 px-3.5 py-1.5 text-xs font-medium text-muted shadow-card backdrop-blur sm:text-sm"
+          >
+            <span className="h-2 w-2 rounded-full bg-brand" />
+            {profile.role}
+            <span className="text-subtle">·</span>
+            <span className="inline-flex items-center gap-1">
+              <MapPin size={13} /> Lagos, Nigeria
+            </span>
+          </motion.div>
+
+          <motion.h1
+            {...fadeUp(0.1)}
+            className="mt-6 text-[2.6rem] font-extrabold leading-[1.05] text-ink sm:text-6xl lg:text-7xl"
+          >
+            Folaranmi{' '}
+            <span className="bg-linear-to-r from-brand to-sky-500 bg-clip-text text-transparent">
+              Aletan
+            </span>
+          </motion.h1>
+
+          <motion.p
+            {...fadeUp(0.2)}
+            className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted md:mx-0 md:text-xl"
+          >
+            I help brands connect authentically with their audiences through digital storytelling,
+            content strategy, and data-backed campaigns.
+          </motion.p>
+
+          <motion.div
+            {...fadeUp(0.3)}
+            className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center md:justify-start"
+          >
+            <a
+              href={profile.cv.href}
+              download={profile.cv.filename}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 font-semibold text-white shadow-lift transition hover:-translate-y-0.5 hover:bg-brand-hover sm:w-auto"
+            >
+              <Download size={18} />
+              Download CV
+            </a>
+            <a
+              href="#contact"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-line bg-surface px-7 py-3.5 font-semibold text-ink transition hover:-translate-y-0.5 hover:border-brand/40 sm:w-auto"
+            >
+              Let's work together
+              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+            </a>
+          </motion.div>
+
+          <motion.ul
+            {...fadeUp(0.4)}
+            className="mt-8 flex flex-col items-center gap-2.5 text-sm text-muted sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 md:justify-start"
+          >
+            {profile.phones.map((phone) => (
+              <li key={phone.tel}>
+                <a href={`tel:${phone.tel}`} className="inline-flex items-center gap-2 transition-colors hover:text-brand-ink">
+                  <Phone size={15} className="text-brand-ink" />
+                  {phone.display}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-brand-ink">
+                <Mail size={15} className="text-brand-ink" />
+                {profile.email}
+              </a>
+            </li>
+          </motion.ul>
+        </div>
+
+        {/* Portrait */}
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center text-gray-400 cursor-pointer"
-          onClick={() => scrollToSection('about')}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2, ease }}
+          className="relative mx-auto w-full max-w-[17rem] sm:max-w-sm"
         >
-          <span className="text-sm mb-2">Scroll Down</span>
-          <ArrowDown size={20} />
+          <div aria-hidden className="absolute inset-0 translate-x-3 translate-y-3 rotate-3 rounded-[2rem] bg-linear-to-br from-brand to-sky-400 opacity-90" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-line bg-surface-2 shadow-lift">
+            <img
+              src={profile.photo}
+              alt={`Portrait of ${profile.name}`}
+              className="aspect-[4/5] w-full object-cover object-[38%_30%]"
+            />
+          </div>
+
+          {/* Experience card */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7, ease }}
+            className="absolute -bottom-6 -left-4 rounded-2xl border border-line bg-surface/95 px-5 py-3.5 shadow-lift backdrop-blur sm:-left-8"
+          >
+            <p className="font-display text-3xl font-extrabold leading-none text-brand-ink">2+</p>
+            <p className="mt-1 text-xs font-medium text-muted">Years of experience</p>
+          </motion.div>
+
+          {/* Platforms card */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.85, ease }}
+            className="absolute -right-4 top-6 max-w-[10.5rem] rounded-2xl border border-line bg-surface/95 px-4 py-3 shadow-lift backdrop-blur sm:-right-8"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-subtle">Platforms</p>
+            <p className="mt-1 text-sm font-semibold leading-snug text-ink">{platforms.join(' · ')}</p>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
